@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22758" systemVersion="23F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Wardrobe" representedClassName="Wardrobe" syncable="YES" codeGeneration="class">
+    <entity name="Wardrobe" representedClassName="Wardrobe" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WardrobeItem" inverseName="wardrobe" inverseEntity="WardrobeItem"/>
     </entity>
-    <entity name="WardrobeItem" representedClassName="WardrobeItem" syncable="YES" codeGeneration="class">
+    <entity name="WardrobeItem" representedClassName="WardrobeItem" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -19,7 +19,7 @@
         <relationship name="usageRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UsageRecord" inverseName="item" inverseEntity="UsageRecord"/>
         <relationship name="wardrobe" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Wardrobe" inverseName="items" inverseEntity="Wardrobe"/>
     </entity>
-    <entity name="Tag" representedClassName="Tag" syncable="YES" codeGeneration="class">
+    <entity name="Tag" representedClassName="Tag" syncable="YES" codeGenerationType="class">
         <attribute name="category" optional="YES" attributeType="String"/>
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -27,7 +27,7 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WardrobeItem" inverseName="tags" inverseEntity="WardrobeItem"/>
     </entity>
-    <entity name="Outfit" representedClassName="Outfit" syncable="YES" codeGeneration="class">
+    <entity name="Outfit" representedClassName="Outfit" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -35,14 +35,15 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="note" optional="YES" attributeType="String"/>
         <relationship name="outfitItems" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="OutfitItem" inverseName="outfit" inverseEntity="OutfitItem"/>
+        <relationship name="usageRecords" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="UsageRecord" inverseName="outfit" inverseEntity="UsageRecord"/>
     </entity>
-    <entity name="OutfitItem" representedClassName="OutfitItem" syncable="YES" codeGeneration="class">
+    <entity name="OutfitItem" representedClassName="OutfitItem" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="sortOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="item" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="WardrobeItem" inverseName="outfitItems" inverseEntity="WardrobeItem"/>
         <relationship name="outfit" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Outfit" inverseName="outfitItems" inverseEntity="Outfit"/>
     </entity>
-    <entity name="UsageRecord" representedClassName="UsageRecord" syncable="YES" codeGeneration="class">
+    <entity name="UsageRecord" representedClassName="UsageRecord" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="note" optional="YES" attributeType="String"/>
