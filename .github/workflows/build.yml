@@ -42,14 +42,22 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build \
-            | xcpretty --color || true
+            build 2>&1 | tee build.log | xcpretty --color || true
+
+      - name: Locate app bundle
+        id: locate
+        run: |
+          APP_PATH=$(find build/DerivedData/Build/Products -name "SmartWardrobe.app" -type d | head -1)
+          echo "app_path=$APP_PATH" >> "$GITHUB_OUTPUT"
+          echo "Found app at: $APP_PATH"
+          ls -la "$(dirname "$APP_PATH")" || true
 
       - name: Upload app artifact
+        if: steps.locate.outputs.app_path != ''
         uses: actions/upload-artifact@v4
         with:
           name: SmartWardrobe.app
-          path: build/DerivedData/Build/Products/Debug-iphonesimulator/SmartWardrobe.app
+          path: ${{ steps.locate.outputs.app_path }}
           retention-days: 30
 
       - name: Upload build log on failure
@@ -57,5 +65,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-log
-          path: ~/Library/Developer/Xcode/DerivedData/**/Logs/**/*.xcactivitylog
+          path: build.log
           retention-days: 7
