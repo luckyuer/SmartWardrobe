@@ -20,10 +20,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: |
-          sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
-          xcodebuild -version
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -33,6 +31,7 @@ jobs:
 
       - name: Build
         run: |
+          set -o pipefail
           xcodebuild \
             -project SmartWardrobe.xcodeproj \
             -scheme SmartWardrobe \
@@ -42,26 +41,23 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            build 2>&1 | tee build.log | xcpretty --color || true
+            build 2>&1 | tee build.log
 
-      - name: Locate app bundle
-        id: locate
-        run: |
-          APP_PATH=$(find build/DerivedData/Build/Products -name "SmartWardrobe.app" -type d | head -1)
-          echo "app_path=$APP_PATH" >> "$GITHUB_OUTPUT"
-          echo "Found app at: $APP_PATH"
-          ls -la "$(dirname "$APP_PATH")" || true
+      - name: List build products
+        if: always()
+        run: find build/DerivedData -name "*.app" -type d || echo "No .app found"
 
       - name: Upload app artifact
-        if: steps.locate.outputs.app_path != ''
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: SmartWardrobe.app
-          path: ${{ steps.locate.outputs.app_path }}
+          name: SmartWardrobe-app
+          path: build/DerivedData/Build/Products/**/SmartWardrobe.app
           retention-days: 30
+          if-no-files-found: warn
 
-      - name: Upload build log on failure
-        if: failure()
+      - name: Upload build log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: build-log
