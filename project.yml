@@ -6,6 +6,9 @@ options:
   xcodeVersion: "15.4"
   createIntermediateGroups: true
   groupSortPosition: top
+  projectFormatSettings:
+    compatibilityVersion: "14.0"
+    currentProjectVersion: "14.0"
 
 settings:
   base:
